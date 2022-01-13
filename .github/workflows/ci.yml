@@ -1,0 +1,26 @@
+on: [push, pull_request]
+name: Continuous Integration
+
+jobs:
+  inspect-code:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install .NET 5.0.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "5.0.x"
+
+      - name: Restore Tools
+        run: dotnet tool restore
+
+      - name: Restore Packages
+        run: dotnet restore
+
+      - name: InspectCode
+        run: |
+          chmod +x "${GITHUB_WORKSPACE}/test.sh"
+          "${GITHUB_WORKSPACE}/test.sh"
